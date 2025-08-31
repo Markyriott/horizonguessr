@@ -1,39 +1,9 @@
 import React, { useState, useCallback,useEffect } from "react";
 import { machinesdata } from "../../data/machine_data";
+import PlayArea from "../ui/PlayArea";
+import GameDisplay from "../ui/GameDisplay";
 
 const MACHINES = Object.keys(machinesdata).map(key =>({name:key}));
-
-function Choice({ text, handleClick }){
-    return(
-        <button className="choice" onClick={handleClick}> {text} </button>
-    )
-}
-
-function PlayArea({ answer, options, answerCheck, difficulty}){
-    const handleClick = (selectedOption)=>{
-        if (answer == selectedOption){
-            answerCheck(true);
-        } else {answerCheck(false)}
-    }
-
-    const handleSubmit = (inputMachine) =>{
-        if (answer.toLowerCase() == inputMachine.trim().toLowerCase()){
-            answerCheck(true);
-        } else {answerCheck(false)}
-    }
-    return (
-        <div className='play-area'>
-            {difficulty <= 1 ?
-            options.map((option)=>(
-                <Choice
-                    key={option.name}
-                    text={option.name}
-                    handleClick={()=>handleClick(option.name)}
-                />
-            )) : <p>Diff greater than 1</p>}
-        </div>
-    )
-}
 
 export default function UnlimitedMachineGuessr({  }){
     const [currentMachine, setCurrentMachine] = useState([]);
@@ -51,12 +21,12 @@ export default function UnlimitedMachineGuessr({  }){
         setOptions(question[1]);
     }, [currentMachine, score])
 
-
     const resetGame = () =>{
         setScore(0);
         setHealth(3);
         getQuestion();
     }
+
     const handleAnswer = (answer) => {
         if (answer){
             console.log("YOU WON! GENERATING NEXT QUESTION!");
@@ -76,7 +46,9 @@ export default function UnlimitedMachineGuessr({  }){
 
     return(
         <div className="game-container">
-            <h2>{currentMachine.name}</h2>
+            {/*<GameDisplay health={health} machineImage={""}/> */ }
+            <p>Score: {score} Health: {health}</p>
+            <p>{currentMachine.name}</p>
             <PlayArea answer = {currentMachine.name} options = {options} answerCheck = {handleAnswer} difficulty={0} />
         </div>
     )    
